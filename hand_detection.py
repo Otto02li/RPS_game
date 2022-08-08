@@ -9,6 +9,8 @@ def get_str_guester(up_fingers, list_lms):
         str_guester = "scissors"
     elif len(up_fingers) == 5 and up_fingers[0] == 4 and up_fingers[1] == 8 and up_fingers[2] == 12 and up_fingers[3] == 16 and up_fingers[4] == 20:
         str_guester = "paper"
+    # elif len(up_fingers) == 0:
+    #     str_guester = "rock"
     elif len(up_fingers) == 0:
         str_guester = "rock"
     else:
@@ -76,17 +78,18 @@ while True:
 
         # 查找外部的点数
         n_fig = -1
-        ll = [4, 8, 12, 16, 20]
-        up_fingers = []
+        ll = [4, 8, 12, 16, 20]     # 凸包外的关键点
+        up_fingers = []  # 检测结果列表
 
         for i in ll:
             pt = (int(list_lms[i][0]), int(list_lms[i][1]))   # 求出点的坐标
             dist = cv2.pointPolygonTest(hull, pt, True)     # 检测该点与凸包的位置关系
             if dist < 0:    # 点在凸包外面
-                up_fingers.append(i)    # 添加这个点的坐标
+                up_fingers.append(i)    # 添加这个点的坐标，在列表末尾添加新的对象
                 # 获取手势的名称
-                str_guester = get_str_guester(up_fingers, list_lms)     # 自定义函数参数（检测到的在凸包外的点, 关键点的坐标）
-                cv2.putText(frame, '    %s'%(str_guester), (90, 90), cv2.FONT_HERSHEY_SIMPLEX,2, (255, 255, 0), 3, cv2.LINE_AA) # 打印识别出的结果
+        str_guester = get_str_guester(up_fingers, list_lms)     # 自定义函数参数（检测到的在凸包外的点, 关键点的坐标）
+        cv2.putText(frame, '    %s'%(str_guester), (90, 90), cv2.FONT_HERSHEY_SIMPLEX,2, (255, 255, 0), 3, cv2.LINE_AA) # 打印识别出的结果
+
 
 
     # 计算FPS
